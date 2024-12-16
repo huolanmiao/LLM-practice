@@ -109,3 +109,18 @@ xcol = torch.gather(topk_indices, -1, ix) # (B, 1)
 # 将logit展成(B*T, vocab_size)，与target(B*T, 1)计算CE loss。
 loss = F.cross_entropy(logits.view(-1, logits.size(-1)), targets.view(-1))
 ```
+
+# Write simple dataloader and add an optimizer
+```
+using device: cuda
+step 0, loss: 10.98649787902832
+step 1, loss: 6.697659015655518
+step 2, loss: 4.540412425994873
+step 3, loss: 2.7975707054138184
+step 4, loss: 1.6325037479400635
+step 5, loss: 0.9096142053604126
+step 6, loss: 0.508819580078125
+step 7, loss: 0.2937222421169281
+step 8, loss: 0.1840878278017044
+step 9, loss: 0.12100420892238617
+```
