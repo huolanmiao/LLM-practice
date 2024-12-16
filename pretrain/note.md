@@ -100,3 +100,6 @@ ix = torch.multinomial(topk_probs, 1) # (B, 1)
 # gather the corresponding indices
 xcol = torch.gather(topk_indices, -1, ix) # (B, 1)
 ```
+
+# Autodetect device, and switch to a random model
+检测一下当前的设备是什么，然后to(device)。
