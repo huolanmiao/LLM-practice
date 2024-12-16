@@ -157,3 +157,13 @@ step 7, loss: 8.699417114257812
 step 8, loss: 8.104934692382812
 step 9, loss: 7.889430522918701
 ```
+
+# lm_head and work token embedding should share parameters
+1. 为什么可以共用参数？\
+因为wte是embedding matrix，lm_head是unembedding matrix。共享参数之后，相似语义的token，有相近的token embedding，进而在hidden_stated经过lm_head后，被预测到有相似的logit。
+2. 好处：这两部分参数量很大，共享参数能够显著减少参数量，使得数据能被更充分的利用，训练更加高效。
+```python
+# weight sharing scheme
+self.transformer.wte.weight = self.lm_head.weight
+```
+3. It's a kind of **inductive bias**.
