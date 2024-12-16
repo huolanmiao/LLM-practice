@@ -377,6 +377,8 @@ optimizer = torch.optim.AdamW(optim_groups, lr=learning_rate, betas=(0.9, 0.95),
 ```
 
 ## Enabling 0.5M batchsize
+<img src="./figures/batchsize.bmp" alt="Python Logo" width="800"/>
+
 ```python
 # 因为显存无法放下整个batch，所以串行的运算grad_accum_steps次，以累积total_batch_size个loss和gradient
 total_batch_size = 524288 # 2**19, ~0.5M, in number of tokens
@@ -403,3 +405,10 @@ step    2 | loss: 9.222029 | lr 1.8000e-04 | norm: 5.8025 | dt: 2891.99ms | tok/
 step    3 | loss: 9.806954 | lr 2.4000e-04 | norm: 8.0335 | dt: 2895.77ms | tok/sec: 181053.32
 step    4 | loss: 9.178097 | lr 3.0000e-04 | norm: 4.3161 | dt: 2895.10ms | tok/sec: 181095.20
 ```
+
+# Distributed Data Parallel
+batchsize = B * T * grad_accum_steps(需要串行的部分) * num_processes(可以放多张卡上并行)
+- Each process run the same source code, and has its only signiture RANK. 我们只让rank为0的master process打印输出。
+- Wrap the model in DDP container, which **enables the overlap of the bachward pass and the  synchronization between GPUs.**
+- DDP会在loss.backward()的时候自动触发all-reduce，同时对num_processes求平均。
+- Optimize the raw_model, not the DDP wrapped model. DDP只负责梯度的分布式同步，参数存储在raw_model中，优化器仍然需要更新原始模型的参数。
