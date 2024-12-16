@@ -111,6 +111,7 @@ loss = F.cross_entropy(logits.view(-1, logits.size(-1)), targets.view(-1))
 ```
 
 # Write simple dataloader and add an optimizer
+尝试能否跑通训练过程。
 ```
 using device: cuda
 step 0, loss: 10.98649787902832
@@ -123,4 +124,36 @@ step 6, loss: 0.508819580078125
 step 7, loss: 0.2937222421169281
 step 8, loss: 0.1840878278017044
 step 9, loss: 0.12100420892238617
+```
+
+# Add a DataLoaderLite
+1. Load the text and encode into tokens.
+2. 核心是next_batch()，取下一个data batch。
+```python
+# 巧妙地错开一位，得到batched inputs和targets
+buf = self.tokens[self.current_position : self.current_position+B*T+1]
+x = (buf[:-1]).view(B, T) # inputs
+y = (buf[1:]).view(B, T) # targets
+# 顺序遍历整个语料，如果下一个batch将超过总长度，则重置读取位置
+# advance the position in the tensor
+self.current_position += B * T
+# if loading the next batch would be out of bounds, reset
+if self.current_position + (B * T + 1) > len(self.tokens):
+    self.current_position = 0
+```
+3. Running output
+```
+using device: cuda
+loaded 338024 tokens
+1 epoch = 2640 batches
+step 0, loss: 10.924686431884766
+step 1, loss: 9.618416786193848
+step 2, loss: 8.596650123596191
+step 3, loss: 8.912147521972656
+step 4, loss: 8.365449905395508
+step 5, loss: 8.139814376831055
+step 6, loss: 8.965357780456543
+step 7, loss: 8.699417114257812
+step 8, loss: 8.104934692382812
+step 9, loss: 7.889430522918701
 ```
