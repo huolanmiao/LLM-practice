@@ -175,3 +175,58 @@ self.transformer.wte.weight = self.lm_head.weight
 ```
 "A modified initialization which accounts for the accumulation on the residual path with model depth is used. We scale the weight of residual layers at initialization by a factor of 1/sqrt(N) where N is the number of residual layers."
 ```
+
+# Speedup the training process
+## Set TensorFloat32 matmuls 
+<img src="./figures/Flops.bmp" alt="Python Logo" width="700"/>
+
+```python
+# 设置 float32 矩阵乘法的内部精度
+# 可以显著提高训练速度
+torch.set_float32_matmul_precision('high')
+```
+
+
+```
+using device: cuda
+loaded 338024 tokens
+1 epoch = 20 batches
+step 0, loss: 10.935506820678711, dt: 1261.48ms, tok/sec: 12987.94
+step 1, loss: 9.398406028747559, dt: 1028.11ms, tok/sec: 15936.10
+step 2, loss: 8.941734313964844, dt: 1034.39ms, tok/sec: 15839.25
+step 3, loss: 8.818684577941895, dt: 1031.17ms, tok/sec: 15888.78
+step 4, loss: 8.487004280090332, dt: 1031.76ms, tok/sec: 15879.67
+```
+```
+using device: cuda
+loaded 338024 tokens
+1 epoch = 20 batches
+step 0, loss: 10.935468673706055, dt: 601.37ms, tok/sec: 27244.39
+step 1, loss: 9.398317337036133, dt: 353.86ms, tok/sec: 46301.37
+step 2, loss: 8.94157886505127, dt: 354.45ms, tok/sec: 46224.01
+step 3, loss: 8.818318367004395, dt: 354.61ms, tok/sec: 46203.34
+step 4, loss: 8.486916542053223, dt: 354.74ms, tok/sec: 46185.73
+```
+
+## Use bfloat16
+
+
+1. Same exponent bits(range), different mantissa bits(precision). No need for gradient scaler.
+2. torch.autocast实现Automatic Mixed Precision，以提高性能同时保持准确性。一些对精度敏感的运算，例如activations、loss保持FP32，而matmul、conv将转变为BF16。
+```python
+# 速度有一定提升
+with torch.autocast(device_type=device, dtype=torch.bfloat16):
+    logits, loss = model(x, y)
+```
+
+```
+using device: cuda
+loaded 338024 tokens
+1 epoch = 20 batches
+step 0, loss: 10.936103820800781, dt: 627.30ms, tok/sec: 26118.33
+step 1, loss: 9.398155212402344, dt: 312.15ms, tok/sec: 52487.02
+step 2, loss: 8.943115234375, dt: 311.01ms, tok/sec: 52680.04
+step 3, loss: 8.822978019714355, dt: 310.76ms, tok/sec: 52721.59
+step 4, loss: 8.487868309020996, dt: 311.29ms, tok/sec: 52632.83
+```
+<img src="./figures/TF32.bmp" alt="Python Logo" width="800"/>
