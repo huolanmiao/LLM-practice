@@ -103,3 +103,9 @@ xcol = torch.gather(topk_indices, -1, ix) # (B, 1)
 
 # Autodetect device, and switch to a random model
 检测一下当前的设备是什么，然后to(device)。
+
+# Implement cross entropy loss in forward()
+```python
+# 将logit展成(B*T, vocab_size)，与target(B*T, 1)计算CE loss。
+loss = F.cross_entropy(logits.view(-1, logits.size(-1)), targets.view(-1))
+```
