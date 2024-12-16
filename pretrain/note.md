@@ -178,6 +178,11 @@ self.transformer.wte.weight = self.lm_head.weight
 
 # Speedup the training process
 ## Set TensorFloat32 matmuls 
+- Tensor Cores accelerate matrix multiplication by performing multiple multiply-accumulate operations simultaneously. 
+- Tensor Cores can perform mixed-precision matrix multiplications and accumulate results in higher precision. 
+- Run TensorCores in TF32 or BF16 is faster 
+
+
 <img src="./figures/Flops.bmp" alt="Python Logo" width="700"/>
 
 ```python
@@ -230,3 +235,22 @@ step 3, loss: 8.822978019714355, dt: 310.76ms, tok/sec: 52721.59
 step 4, loss: 8.487868309020996, dt: 311.29ms, tok/sec: 52632.83
 ```
 <img src="./figures/TF32.bmp" alt="Python Logo" width="800"/>
+
+## Torch.complie
+Speedup mainly comes from reducing Python overhead and GPU read/writes.
+1. No need for python interpreter: torch.compile sees the entire code and turn it into efficient code.
+2. Kernel fusion: reduce GPU read/write.
+```python
+# Take compilation time, but train faster.
+model = torch.compile(model)
+```
+```
+using device: cuda
+loaded 338024 tokens
+1 epoch = 20 batches
+step 0, loss: 10.935880661010742, dt: 27732.57ms, tok/sec: 590.79
+step 1, loss: 9.398301124572754, dt: 136.01ms, tok/sec: 120459.68
+step 2, loss: 8.942550659179688, dt: 135.46ms, tok/sec: 120952.63
+step 3, loss: 8.821760177612305, dt: 135.71ms, tok/sec: 120724.84
+step 4, loss: 8.487848281860352, dt: 136.00ms, tok/sec: 120469.60
+```
