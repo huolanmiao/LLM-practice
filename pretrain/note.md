@@ -288,3 +288,17 @@ step 2, loss: 8.94234848022461, dt: 97.89ms, tok/sec: 167379.46
 step 3, loss: 8.820586204528809, dt: 97.14ms, tok/sec: 168665.73
 step 4, loss: 8.487573623657227, dt: 97.39ms, tok/sec: 168226.82
 ```
+
+### Avoid ugly numbers: vocab_size 50257 -> 50304
+- Single Instruction Multiple Thread: 实际上一个warp执行相同的指令，或者说执行同一个kernel function，一个warp包含32个thread，如果我们的参数不够好，可能会有remaining part导致耗费时间。
+- 多出的vocab_size，对应的embedding将被置零，因为没有token对应到这些indices。
+```
+using device: cuda
+loaded 338024 tokens
+1 epoch = 20 batches
+step 0, loss: 10.947336196899414, dt: 16484.30ms, tok/sec: 993.92
+step 1, loss: 9.388265609741211, dt: 93.20ms, tok/sec: 175789.10
+step 2, loss: 8.963359832763672, dt: 94.78ms, tok/sec: 172854.83
+step 3, loss: 8.852533340454102, dt: 94.41ms, tok/sec: 173549.81
+step 4, loss: 8.50554084777832, dt: 94.43ms, tok/sec: 173511.25
+```
