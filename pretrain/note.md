@@ -304,7 +304,9 @@ step 4, loss: 8.50554084777832, dt: 94.43ms, tok/sec: 173511.25
 ```
 
 # Details of model training----refer to GPT-3
-
+ ```
+ To train all versions of GPT-3, we use Adam with 1 = 09, 2 = 095, and = 10 8, we clip the global norm of the gradient at 1.0, and we use cosine decay for learning rate down to 10% of its value, over 260 billion tokens (after 260 billion tokens, training continues at 10% of the original learning rate). There is a linear LR warmup over the first 375 million tokens. We also gradually increase the batch size linearly from a small value (32k tokens) to the full value over the first 4-12 billion tokens of training, depending on the model size. Data are sampled without replacement during training (until an epoch boundary is reached) to minimize overfitting. All models use weight decay of 0.1 to provide a small amount of regularization.
+ ```
 ## AdamW hyperparameters
 ```python
 optimizer = torch.optim.AdamW(model.parameters(), lr=3e-4, betas=(0.9, 0.95), eps=1e-8)
@@ -318,3 +320,21 @@ optimizer = torch.optim.AdamW(model.parameters(), lr=3e-4, betas=(0.9, 0.95), ep
 # torch.nn.utils.clip_grad_norm_(parameters, max_norm, norm_type=2.0)
 norm = torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
 ```
+```
+using device: cuda
+loaded 338024 tokens
+1 epoch = 20 batches
+step    0 | loss: 10.947336 | norm: 28.5686 | dt: 6138.27ms | tok/sec: 2669.16
+step    1 | loss: 9.388454 | norm: 6.1851 | dt: 95.02ms | tok/sec: 172430.22
+step    2 | loss: 8.949810 | norm: 2.4907 | dt: 96.79ms | tok/sec: 169278.56
+step    3 | loss: 8.764482 | norm: 2.8624 | dt: 96.54ms | tok/sec: 169712.50
+step    4 | loss: 8.771492 | norm: 10.1790 | dt: 96.01ms | tok/sec: 170650.22
+step    5 | loss: 8.454670 | norm: 2.0210 | dt: 96.12ms | tok/sec: 170454.23
+step    6 | loss: 8.338696 | norm: 2.4302 | dt: 96.32ms | tok/sec: 170096.03
+step    7 | loss: 8.064600 | norm: 1.7912 | dt: 96.30ms | tok/sec: 170143.20
+step    8 | loss: 7.772311 | norm: 2.0319 | dt: 95.98ms | tok/sec: 170696.84
+step    9 | loss: 7.520995 | norm: 1.5736 | dt: 96.44ms | tok/sec: 169895.02
+```
+
+## Learning rate scheduler
+<img src="./figures/lr.bmp" alt="Python Logo" width="800"/>
