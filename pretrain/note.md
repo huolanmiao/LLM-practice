@@ -375,3 +375,31 @@ use_fused = fused_available and 'cuda' in device
 print(f"using fused AdamW: {use_fused}")
 optimizer = torch.optim.AdamW(optim_groups, lr=learning_rate, betas=(0.9, 0.95), eps=1e-8, fused=use_fused)
 ```
+
+## Enabling 0.5M batchsize
+```python
+# 因为显存无法放下整个batch，所以串行的运算grad_accum_steps次，以累积total_batch_size个loss和gradient
+total_batch_size = 524288 # 2**19, ~0.5M, in number of tokens
+grad_accum_steps = total_batch_size // (B * T)
+```
+```python
+# 梯度累积之后应求平均，因为每个mini_batch的大小都是B*T，所以只需要再除以grad_accum_steps
+loss = loss / grad_accum_steps
+```
+```
+using device: cuda
+total desired batch size: 524288
+=> calculated gradient accumulation steps: 32
+loaded 338024 tokens
+1 epoch = 20 batches
+loaded 338024 tokens
+1 epoch = 20 batches
+num decayed parameter tensors: 50, with 124,354,560 parameters
+num non-decayed parameter tensors: 98, with 121,344 parameters
+using fused AdamW: True
+step    0 | loss: 10.937969 | lr 6.0000e-05 | norm: 26.9896 | dt: 8847.89ms | tok/sec: 59255.72
+step    1 | loss: 9.650049 | lr 1.2000e-04 | norm: 9.5442 | dt: 2890.59ms | tok/sec: 181377.28
+step    2 | loss: 9.222029 | lr 1.8000e-04 | norm: 5.8025 | dt: 2891.99ms | tok/sec: 181289.75
+step    3 | loss: 9.806954 | lr 2.4000e-04 | norm: 8.0335 | dt: 2895.77ms | tok/sec: 181053.32
+step    4 | loss: 9.178097 | lr 3.0000e-04 | norm: 4.3161 | dt: 2895.10ms | tok/sec: 181095.20
+```
