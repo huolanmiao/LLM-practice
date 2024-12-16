@@ -305,7 +305,13 @@ step 4, loss: 8.50554084777832, dt: 94.43ms, tok/sec: 173511.25
 
 # Details of model training----refer to GPT-3
  ```
- To train all versions of GPT-3, we use Adam with 1 = 09, 2 = 095, and = 10 8, we clip the global norm of the gradient at 1.0, and we use cosine decay for learning rate down to 10% of its value, over 260 billion tokens (after 260 billion tokens, training continues at 10% of the original learning rate). There is a linear LR warmup over the first 375 million tokens. We also gradually increase the batch size linearly from a small value (32k tokens) to the full value over the first 4-12 billion tokens of training, depending on the model size. Data are sampled without replacement during training (until an epoch boundary is reached) to minimize overfitting. All models use weight decay of 0.1 to provide a small amount of regularization.
+ To train all versions of GPT-3, we use Adam with 1 = 09, 2 = 095, and = 10 8, we clip the global norm of the gradient at 1.0, and we use cosine decay for learning rate down to 10% of its value, over 260 billion tokens (after 260 billion tokens, training continues at 10% of the original learning rate). There is a linear LR warmup over the first 375 million tokens. 
+ 
+ We also gradually increase the batch size linearly from a small value (32k tokens) to the full value over the first 4-12 billion tokens of training, depending on the model size. 
+ 
+ Data are sampled without replacement during training (until an epoch boundary is reached) to minimize overfitting. 
+ 
+ All models use weight decay of 0.1 to provide a small amount of regularization.
  ```
 ## AdamW hyperparameters
 ```python
@@ -338,3 +344,34 @@ step    9 | loss: 7.520995 | norm: 1.5736 | dt: 96.44ms | tok/sec: 169895.02
 
 ## Learning rate scheduler
 <img src="./figures/lr.bmp" alt="Python Logo" width="800"/>
+
+## Add weight decay and fused AdamW
+- The "W" in AdamW stands for "Weight Decay".
+- Prevent overfitting by adding a penalty (**L2 regularization**) to the loss function.
+- AdamW decouples weight decay from the optimization steps. The weight decay is applied directly to the parameters rather than being mixed with the gradient updates.
+$$
+\theta_{t+1} = \theta_t - \eta \cdot \nabla_{\theta} J(\theta_t) + \lambda \cdot \theta_t
+$$
+```python
+# 筛选所有需要梯度更新的参数
+# start with all of the candidate parameters (that require grad)
+param_dict = {pn: p for pn, p in self.named_parameters()}
+param_dict = {pn: p for pn, p in param_dict.items() if p.requires_grad}
+# 只对维度大于2D的参数做weight decay
+# create optim groups. Any parameters that is 2D will be weight decayed, otherwise no.
+# i.e. all weight tensors in matmuls + embeddings decay, all biases and layernorms don't.
+decay_params = [p for n, p in param_dict.items() if p.dim() >= 2]
+nodecay_params = [p for n, p in param_dict.items() if p.dim() < 2]
+optim_groups = [
+    {'params': decay_params, 'weight_decay': weight_decay},
+    {'params': nodecay_params, 'weight_decay': 0.0}
+]
+```
+```python
+# 如果有fused函数参数且在gpu上运行，则使用kernel fusion for AdamW optimization
+# Create AdamW optimizer and use the fused version if it is available
+fused_available = 'fused' in inspect.signature(torch.optim.AdamW).parameters
+use_fused = fused_available and 'cuda' in device
+print(f"using fused AdamW: {use_fused}")
+optimizer = torch.optim.AdamW(optim_groups, lr=learning_rate, betas=(0.9, 0.95), eps=1e-8, fused=use_fused)
+```
