@@ -236,7 +236,7 @@ step 4, loss: 8.487868309020996, dt: 311.29ms, tok/sec: 52632.83
 ```
 <img src="./figures/TF32.bmp" alt="Python Logo" width="800"/>
 
-## Torch.complie
+## Use torch.complie
 Speedup mainly comes from reducing Python overhead and GPU read/writes.
 1. No need for python interpreter: torch.compile sees the entire code and turn it into efficient code.
 2. Kernel fusion: reduce GPU read/write.
@@ -253,4 +253,38 @@ step 1, loss: 9.398301124572754, dt: 136.01ms, tok/sec: 120459.68
 step 2, loss: 8.942550659179688, dt: 135.46ms, tok/sec: 120952.63
 step 3, loss: 8.821760177612305, dt: 135.71ms, tok/sec: 120724.84
 step 4, loss: 8.487848281860352, dt: 136.00ms, tok/sec: 120469.60
+```
+
+## Use Flash Attention
+```python
+# Flash Attention
+y = F.scaled_dot_product_attention(q, k, v, is_causal=True) 
+# Attention 
+# (materializes the large (T,T) matrix for all the queries and keys)
+# att = (q @ k.transpose(-2, -1)) * (1.0 / math.sqrt(k.size(-1)))
+# att = att.masked_fill(self.bias[:,:,:T,:T] == 0, float('-inf'))
+# att = F.softmax(att, dim=-1)
+# y = att @ v # (B, nh, T, T) x (B, nh, T, hs) -> (B, nh, T, hs)
+```
+### A kernel fusion algorithm, which torch.compile cannot find
+- Rewrite the implementation of attention mechanism.
+- More Flops, but less memory read/write 
+  * by making attention matrix never materialized
+  * by online-softmax......
+
+https://zhuanlan.zhihu.com/p/668888063
+
+### Insights behind Flash attention
+1. Be aware of memory hierarchy
+2. Flops doesn't matter, the whole memory access pattern matters.
+3. There are some optimization that torch.compile can't find.
+```
+using device: cuda
+loaded 338024 tokens
+1 epoch = 20 batches
+step 0, loss: 10.9359130859375, dt: 15738.08ms, tok/sec: 1041.04
+step 1, loss: 9.398147583007812, dt: 96.13ms, tok/sec: 170428.02
+step 2, loss: 8.94234848022461, dt: 97.89ms, tok/sec: 167379.46
+step 3, loss: 8.820586204528809, dt: 97.14ms, tok/sec: 168665.73
+step 4, loss: 8.487573623657227, dt: 97.39ms, tok/sec: 168226.82
 ```
