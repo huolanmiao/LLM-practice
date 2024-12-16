@@ -412,3 +412,7 @@ batchsize = B * T * grad_accum_steps(需要串行的部分) * num_processes(可�
 - Wrap the model in DDP container, which **enables the overlap of the bachward pass and the  synchronization between GPUs.**
 - DDP会在loss.backward()的时候自动触发all-reduce，同时对num_processes求平均。
 - Optimize the raw_model, not the DDP wrapped model. DDP只负责梯度的分布式同步，参数存储在raw_model中，优化器仍然需要更新原始模型的参数。
+
+# Use FinewebEDU dataset
+1. Get the training datasets. Organize the file dir in a list.
+2. Modify the dataloader. If the next position is out of range, then switch to the next shard and reset to the initial position.
