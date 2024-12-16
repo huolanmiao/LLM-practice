@@ -167,3 +167,11 @@ step 9, loss: 7.889430522918701
 self.transformer.wte.weight = self.lm_head.weight
 ```
 3. It's a kind of **inductive bias**.
+
+# GPT-2 Initialization
+1. Set the bias to 0.
+2. Scale the std of the nn.linear layer. 
+3. Set the random seed.
+```
+"A modified initialization which accounts for the accumulation on the residual path with model depth is used. We scale the weight of residual layers at initialization by a factor of 1/sqrt(N) where N is the number of residual layers."
+```
