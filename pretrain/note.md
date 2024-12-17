@@ -417,6 +417,7 @@ batchsize = B * T * grad_accum_steps(需要串行的部分) * num_processes(可�
 1. Get the training datasets. Organize the file dir in a list.
 2. Modify the dataloader. If the next position is out of range, then switch to the next shard and reset to the initial position.
    
-# Add validation split
+# Add validation split and hellaswag evaluation
 1. Get val_dataloader using 'val' split of the datase.
 2. Do evaluation every 100 training steps.
+3. Hellaswag选取最合理的句子续写选项，比较模型对每个选项的average loss。
