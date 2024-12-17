@@ -180,7 +180,7 @@ self.transformer.wte.weight = self.lm_head.weight
 ## Set TensorFloat32 matmuls 
 - Tensor Cores accelerate matrix multiplication by performing multiple multiply-accumulate operations simultaneously. 
 - Tensor Cores can perform mixed-precision matrix multiplications and accumulate results in higher precision. 
-- Run TensorCores in TF32 or BF16 is faster 
+- Run TensorCores in TF32 or BF16 is faster.
 
 
 <img src="./figures/Flops.bmp" alt="Python Logo" width="700"/>
@@ -416,3 +416,7 @@ batchsize = B * T * grad_accum_steps(需要串行的部分) * num_processes(可�
 # Use FinewebEDU dataset
 1. Get the training datasets. Organize the file dir in a list.
 2. Modify the dataloader. If the next position is out of range, then switch to the next shard and reset to the initial position.
+   
+# Add validation split
+1. Get val_dataloader using 'val' split of the datase.
+2. Do evaluation every 100 training steps.
