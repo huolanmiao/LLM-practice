@@ -421,3 +421,6 @@ batchsize = B * T * grad_accum_steps(需要串行的部分) * num_processes(可�
 1. Get val_dataloader using 'val' split of the datase.
 2. Do evaluation every 100 training steps.
 3. Hellaswag选取最合理的句子续写选项，比较模型对每个选项的average loss。
+
+# Add checkpointing
+如果希望完全接续训练，除了保存当前权重之外，还需要保存optimizer状态。
