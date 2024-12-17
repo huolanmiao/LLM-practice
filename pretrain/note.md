@@ -424,3 +424,7 @@ batchsize = B * T * grad_accum_steps(需要串行的部分) * num_processes(可�
 
 # Add checkpointing
 如果希望完全接续训练，除了保存当前权重之外，还需要保存optimizer状态。
+
+# Some small changes
+1. `device_type` only refers to the type of the hardware where the tensor is stored "cpu" or "cuda", while `device` can includes the device identifier "cuda:0". Some function are restrict to the difference between them.
+2. `model.require_backward_grad_sync` is actually used by both the forward and backward pass. During the forward pass, the `require_backward_grad_sync` flag doesn't directly influence the computation. However, the module may need to track whether the backward pass will require gradient synchronization based on this flag.
