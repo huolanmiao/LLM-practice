@@ -94,6 +94,7 @@ class Trainer:
         print('***** Running training *****')
         self.model.train()
         self.log_file = open(os.path.join(self.output_dir, "train_log.txt"), "w")
+        log(self.log_file, f"Trainable parameters: {sum(p.numel() for p in self.model.parameters() if p.requires_grad)}")
         step = 0
         self.optimizer.zero_grad()
         loss_accum = 0.0
