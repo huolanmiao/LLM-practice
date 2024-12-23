@@ -3,7 +3,7 @@ python train.py \
     --max_length 512 \
     --trust_remote_code True \
     --use_lora True \
-    --lora_dim 8 \
+    --lora_dim 1 \
     --lora_scaling 32 \
     --lora_module_name h. \
     --data_path ./data/alpaca_data.json \
