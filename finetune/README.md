@@ -27,8 +27,8 @@ torch.nn.functional.linear(input, weight, bias=None)
 
 # LoRA learning curve
 
-| ![Image 1](url_to_image1) | ![Image 2](url_to_image2) | ![Image 3](url_to_image3) |
+| ![Image 1](./results/lora_1/learning_curve.png) | ![Image 2](./results/lora_2/learning_curve.png) | ![Image 3](./results/lora_4/learning_curve.png) |
 |---------------------------|---------------------------|---------------------------|
-| ![Image 4](url_to_image4) | ![Image 5](url_to_image5) | ![Image 6](url_to_image6) |
+| ![Image 4](./results/lora_8/learning_curve.png) | ![Image 5](./results/lora_16/learning_curve.png) | ![Image 6](./results/lora_32/learning_curve.png) |
 
 # Generation

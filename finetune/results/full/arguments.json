@@ -3,7 +3,7 @@
     "max_length": 512,
     "trust_remote_code": true,
     "use_lora": false,
-    "lora_dim": 8,
+    "lora_dim": 1,
     "lora_scaling": 32,
     "lora_module_name": "h.",
     "lora_load_path": null,

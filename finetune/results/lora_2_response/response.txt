@@ -1,0 +1,17 @@
+BEGINNING OF CONVERSATION: USER: Give three tips for a good meal. ASSISTANT: Three tips for a good meal are: 1. Eating fresh food before eating out.
+2. Eating a healthy, locally sourced meal.
+3. Avoid eating foods that are high in cholesterol, sodium, and other unhealthy ingredients.
+
+BEGINNING OF CONVERSATION: USER: Write a poem about a delicious night. ASSISTANT: The sun had just come up, and the moon was shining brightly. 
+The sun was shining like a blue gem, so bright it could be seen. 
+The sun was shining like a beacon, and the moon was shining like a beacon. 
+The moon was like a shining beacon, and the stars were shining like a beacon. 
+
+The night was so
+
+BEGINNING OF CONVERSATION: USER: Write a tweet describing your capabilities. ASSISTANT: This is amazing! I'm working hard to build a strong team that is confident, focused, and smart. I want to be able to work with everyone, so I can build on that. #TeamStrong
+
+BEGINNING OF CONVERSATION: USER: Pretend you are an alien visiting Earth. Write three opinions you believe. ASSISTANT: 1. The Earth is a beautiful place. 
+2. The Earth is full of life. 
+3. The Earth is full of life.
+

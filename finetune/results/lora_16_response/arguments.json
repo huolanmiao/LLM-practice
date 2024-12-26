@@ -1,0 +1,13 @@
+{
+    "model_name_or_path": "gpt2",
+    "max_length": 512,
+    "trust_remote_code": true,
+    "use_lora": true,
+    "lora_dim": 16,
+    "lora_scaling": 32,
+    "lora_module_name": "h.",
+    "lora_load_path": "./results/lora_16/lora.pt",
+    "seed": 42,
+    "use_cuda": false,
+    "output_dir_name": "gpt2-alpaca-eval"
+}
