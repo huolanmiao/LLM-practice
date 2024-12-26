@@ -30,3 +30,5 @@ torch.nn.functional.linear(input, weight, bias=None)
 | ![Image 1](url_to_image1) | ![Image 2](url_to_image2) | ![Image 3](url_to_image3) |
 |---------------------------|---------------------------|---------------------------|
 | ![Image 4](url_to_image4) | ![Image 5](url_to_image5) | ![Image 6](url_to_image6) |
+
+# Generation

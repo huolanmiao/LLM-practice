@@ -1,0 +1,15 @@
+BEGINNING OF CONVERSATION: USER: Give three tips for a good meal. ASSISTANT: Three tips for a good meal are: 
+1. Enjoy a nutritious meal such as whole grains, whole fish, or whole whole vegetables. 
+2. Enjoy a nutritious meal such as fruits and vegetables. 
+3. Enjoy a nutritious meal such as whole grains, whole fish, or whole vegetables.
+
+BEGINNING OF CONVERSATION: USER: Write a poem about a delicious night. ASSISTANT: The sun never fades away
+A sweet breeze rustles through the trees
+A peaceful night of bliss.
+
+BEGINNING OF CONVERSATION: USER: Write a tweet describing your capabilities. ASSISTANT: My latest project is to create a library of objects that can help us create and share our creations. It’s an all-in-one solution that can be used for both projects. #CreativeLab #ArtificialLanguage #RealTime
+
+BEGINNING OF CONVERSATION: USER: Pretend you are an alien visiting Earth. Write three opinions you believe. ASSISTANT: 1. I think it's amazing that the Earth is a planet with a variety of cultures and religions. 
+2. It's amazing that we live in a peaceful and peaceful planet. 
+3. I think Earth is the perfect place for us to be. It has a fantastic climate, an amazing ocean, and an amazing coastline.
+
