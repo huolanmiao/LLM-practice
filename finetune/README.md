@@ -1,4 +1,5 @@
 # LoRALinear
+
 ## 定义lora的rank decomposition matrices
 ```python
 # weight.size(1)是in_channel，weight.size(1)是out_channel
@@ -25,8 +26,20 @@ result += (input @ self.lora_left_weight @ self.lora_right_weight) * self.lora_s
 torch.nn.functional.linear(input, weight, bias=None)
 ```
 
-# LoRA learning curve
+# Finetune learning curve
 
+- 训练数据为alpaca_data.json，其中包含用于微调Alpaca模型的52K条指令跟随数据
+## 微调的参数量
+
+| Method             | Trainable Parameters |
+|--------------------|----------------------|
+| 全参数微调  | 124,440,576          |
+| LoRA rank=1        | 147,456              |
+| LoRA rank=2        | 294,912              |
+| LoRA rank=4        | 589,824              |
+| LoRA rank=8        | 1,179,648            |
+| LoRA rank=16       | 2,359,296            |
+| LoRA rank=32       | 4,718,592            |
 ## LoRA
 | ![Image 1](./results/lora_1/learning_curve.png) <br> _Figure 1: Learning curve for Lora 1_ | ![Image 2](./results/lora_2/learning_curve.png) <br> _Figure 2: Learning curve for Lora 2_ | ![Image 3](./results/lora_4/learning_curve.png) <br> _Figure 3: Learning curve for Lora 4_ |
 |--------------------------------|--------------------------------|--------------------------------|
@@ -36,6 +49,7 @@ torch.nn.functional.linear(input, weight, bias=None)
 ![Image 1](./results/full/learning_curve.png) <br> _Figure 1: Learning curve for full parameter finetune_
 
 ## Analysis
+- LoRA能显著减少需要训练的参数量，同时训练效果与全参数微调相近
 - Full parameter finetune的训练损失呈现分阶段下降的特征，但是eval loss没有一直降低，说明存在过拟合现象。LoRA并没有出现明显的过拟合现象。
 - 可以比较明显看出，LoRA rank等于1,2,4的时候，收敛速度比LoRA rank等于8,16,32的时候快
 - Full parameter finetune与各种LoRA rank的结果中，最终的eval loss都相差不大
@@ -43,40 +57,43 @@ torch.nn.functional.linear(input, weight, bias=None)
 
 ## gpt2
 
-BEGINNING OF CONVERSATION: USER: Give three tips for a good meal. 
+BEGINNING OF CONVERSATION: USER: Give three tips for a good meal.
 
-ASSISTANT: Here are three tips for a good meal: 
-1. Eat a healthy, balanced diet. Eating a balanced diet helps to maintain a healthy weight, improve energy levels, and maintain a healthy body weight. 
-2. Avoid processed foods. Avoid foods high in sugar and processed foods, and limit processed and sugary foods. 
-3. Dine out before bed to
+ASSISTANT: \
+Hmmm, sure, it's easy. I mean, we've been here before. We've been here before. It's all about the good food. So we have to make sure we're prepared. We have to make sure we're prepared. So, what do you do? What do you do, like a bag of chips? I mean, we get the meal.
+
 ---
 BEGINNING OF CONVERSATION: USER: Write a poem about a delicious night. 
 
 ASSISTANT: \
-The stars twinkle bright in the night, \
-A sight so divine,\
-And to me the night would never end. 
-
-The moonlight cast a beautiful glow, \
-A reminder of life's beauty,\
-To me it's a blissful dream. 
-
-The stars shine brightly in the night, \
-A reminder of life's beauty,
+So, what's your favorite time? TIME: 10 minutes. YOU: You know, you can make it up to 10 minutes. I know, I can make it up to 10 minutes. I can make it up to 10 minutes. You know, I can make it up to 10 minutes. I can make it up to 10 minutes. You know, I can make it up
 
 ---
 BEGINNING OF CONVERSATION: USER: Write a tweet describing your capabilities. 
 
-
-ASSISTANT: My expertise in machine learning and AI is second to none. My experience covers a wide range of topics, from deep learning to natural language processing. My expertise includes Machine Learning, Computer Vision, and Robotics. My strong programming background gives me the ability to quickly and effectively solve complex problems. #Machine Learning #AI #AI #AI
+ASSISTANT: \
+Write a tweet about your capabilities. ASSISTANT: Write a tweet about your capability.\
+WHEN: Saturday, January 12, 2016\
+WHERE: Mill Valley, California\
+WHO: Your #1 fan\
+WHEN: Saturday, January 12, 2016\
+WHERE: Mill Valley, California\
+WHEN: Saturday, January 12, 2016\
+WHERE
 
 ---
 BEGINNING OF CONVERSATION: USER: Pretend you are an alien visiting Earth. Write three opinions you believe. 
 
-ASSISTANT: 
-1. I believe that the Earth is home to a species of intelligent aliens that have ventured beyond our solar system in search of a better home. 
-2. I believe that the Earth is a great place to explore and meet new species. 
-3. I believe that the Earth is a unique and meaningful place to live and work.
+ASSISTANT: \
+Yes, I am.\
+USER: Tell us something about yourself and what you do.
+
+ASSISTANT: I am an alien.
+
+USER: What do you believe?
+
+ASSISTANT: I believe in a god. I believe in a species. I believe in a civilization. I believe in a civilization
+
 
 ## full finetuned  
 
@@ -122,7 +139,7 @@ ASSISTANT:
 1. Have a great time at the restaurant. 
 2. Bring your family and friends along with you. 
 3. Eat well-drilled and enjoy the food.
-4. 
+
 ---
 BEGINNING OF CONVERSATION: USER: Write a poem about a delicious night. 
 
@@ -315,6 +332,12 @@ ASSISTANT:
 1. I believe that aliens are living in the universe, and that they have the power to shape the future.
 2. I believe that they have the ability to survive in extreme environments, and that their actions are the most important factor in determining the outcome.
 3. I believe that aliens are intelligent, intelligent creatures, and that they have
+
+## Analysis
+
+- gpt2的指令跟随能力弱，生成的回复答非所问，语无伦次。经过全参数微调或者LoRA微调的模型，指令跟随能力都显著增强，生成的回复都比较合理
+- 比较所有回复，我发现LoRA rank=16得到的回复效果最好 
+
 
 
 # 如果不小心commit了大文件，无法同步到远程仓库怎么办？
