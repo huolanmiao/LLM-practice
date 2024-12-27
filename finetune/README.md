@@ -32,3 +32,34 @@ torch.nn.functional.linear(input, weight, bias=None)
 | ![Image 4](./results/lora_8/learning_curve.png) | ![Image 5](./results/lora_16/learning_curve.png) | ![Image 6](./results/lora_32/learning_curve.png) |
 
 # Generation
+
+
+# 如果不小心commit了大文件，无法同步到远程仓库怎么办？
+
+1. 查找大文件的pack id，从小到大排列
+   ```
+   git verify-pack -v .git/objects/pack/pack-*.idx | sort -k 3 -g | tail -5
+   ```
+2. 查找涉及到的文件地址
+    ```
+    git rev-list --objects --all | grep <id>
+    ```
+3. 将该文件从历史记录中删除
+   ```
+   git log --pretty=oneline --branches -- <file_path>
+   ```
+4. 重写所有commit
+   ```
+   git filter-branch --index-filter 'git rm --cached --ignore-unmatch <file_path>' -- --all
+   ```
+5. 完全删除引用
+   ```
+   rm -Rf .git/refs/original //删除git的备份
+   rm -Rf .git/logs/ // 删除logs
+   git gc //收集所有松散对象并将它们存入 packfile（垃圾回收）
+   git prune //删除所有过期的、不可达的且未被打包的松散对象
+   ```
+6. 提交
+   ```
+   git push origin xxx --force
+   ```
