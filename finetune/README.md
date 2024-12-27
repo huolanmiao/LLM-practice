@@ -63,3 +63,13 @@ torch.nn.functional.linear(input, weight, bias=None)
    ```
    git push origin xxx --force
    ```
+
+# 设置.gitignore忽略不想提交的文件
+
+1. 通过在项目的某个文件夹下定义`.gitignore`文件，在该文件中定义相应的忽略规则，来管理当前文件夹下的文件的Git提交行为，在每一行指定一个忽略规则
+2. 设置全局的git .gitignore文件来管理所有Git项目的行为，创建相应的`.gitignore`文件
+   ```
+   git config --global core.excludesfile ~/.gitignore
+   ```
+
+此处`.gitignore`文件中添加一行`*.safetensors`忽略以safetensors结尾的模型
