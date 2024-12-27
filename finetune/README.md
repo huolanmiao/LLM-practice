@@ -27,11 +27,294 @@ torch.nn.functional.linear(input, weight, bias=None)
 
 # LoRA learning curve
 
-| ![Image 1](./results/lora_1/learning_curve.png) | ![Image 2](./results/lora_2/learning_curve.png) | ![Image 3](./results/lora_4/learning_curve.png) |
-|---------------------------|---------------------------|---------------------------|
-| ![Image 4](./results/lora_8/learning_curve.png) | ![Image 5](./results/lora_16/learning_curve.png) | ![Image 6](./results/lora_32/learning_curve.png) |
+## LoRA
+| ![Image 1](./results/lora_1/learning_curve.png) <br> _Figure 1: Learning curve for Lora 1_ | ![Image 2](./results/lora_2/learning_curve.png) <br> _Figure 2: Learning curve for Lora 2_ | ![Image 3](./results/lora_4/learning_curve.png) <br> _Figure 3: Learning curve for Lora 4_ |
+|--------------------------------|--------------------------------|--------------------------------|
+| ![Image 4](./results/lora_8/learning_curve.png) <br> _Figure 4: Learning curve for Lora 8_ | ![Image 5](./results/lora_16/learning_curve.png) <br> _Figure 5: Learning curve for Lora 16_ | ![Image 6](./results/lora_32/learning_curve.png) <br> _Figure 6: Learning curve for Lora 32_ |
 
+## Full finetune
+![Image 1](./results/full/learning_curve.png) <br> _Figure 1: Learning curve for full parameter finetune_
+
+## Analysis
+- Full parameter finetune的训练损失呈现分阶段下降的特征，但是eval loss没有一直降低，说明存在过拟合现象。LoRA并没有出现明显的过拟合现象。
+- 可以比较明显看出，LoRA rank等于1,2,4的时候，收敛速度比LoRA rank等于8,16,32的时候快
+- Full parameter finetune与各种LoRA rank的结果中，最终的eval loss都相差不大
 # Generation
+
+## gpt2
+
+BEGINNING OF CONVERSATION: USER: Give three tips for a good meal. 
+
+ASSISTANT: Here are three tips for a good meal: 
+1. Eat a healthy, balanced diet. Eating a balanced diet helps to maintain a healthy weight, improve energy levels, and maintain a healthy body weight. 
+2. Avoid processed foods. Avoid foods high in sugar and processed foods, and limit processed and sugary foods. 
+3. Dine out before bed to
+---
+BEGINNING OF CONVERSATION: USER: Write a poem about a delicious night. 
+
+ASSISTANT: \
+The stars twinkle bright in the night, \
+A sight so divine,\
+And to me the night would never end. 
+
+The moonlight cast a beautiful glow, \
+A reminder of life's beauty,\
+To me it's a blissful dream. 
+
+The stars shine brightly in the night, \
+A reminder of life's beauty,
+
+---
+BEGINNING OF CONVERSATION: USER: Write a tweet describing your capabilities. 
+
+
+ASSISTANT: My expertise in machine learning and AI is second to none. My experience covers a wide range of topics, from deep learning to natural language processing. My expertise includes Machine Learning, Computer Vision, and Robotics. My strong programming background gives me the ability to quickly and effectively solve complex problems. #Machine Learning #AI #AI #AI
+
+---
+BEGINNING OF CONVERSATION: USER: Pretend you are an alien visiting Earth. Write three opinions you believe. 
+
+ASSISTANT: 
+1. I believe that the Earth is home to a species of intelligent aliens that have ventured beyond our solar system in search of a better home. 
+2. I believe that the Earth is a great place to explore and meet new species. 
+3. I believe that the Earth is a unique and meaningful place to live and work.
+
+## full finetuned  
+
+BEGINNING OF CONVERSATION: USER: Give three tips for a good meal. 
+
+ASSISTANT: 
+1. Utilize a variety of cooking techniques and ingredients. 
+2. Make a to-do list and stick to it. 
+3. Utilize a variety of cooking methods such as pre-bed, pre-bed cooking, and cooking hot dogs.
+
+---
+BEGINNING OF CONVERSATION: USER: Write a poem about a delicious night. 
+
+ASSISTANT: \
+The stars twinkle in the night, \
+Gently twinkle bright,’s’s favorite color, \
+A perfect night’s delight. 
+
+The night’s peaceful,’s beauty,’s stillness, \
+A perfect night’s sight,’s peaceful sight, 
+
+The stars
+
+---
+BEGINNING OF CONVERSATION: USER: Write a tweet describing your capabilities. 
+
+ASSISTANT: My capabilities are the power to make the world a better place. With the help of my team, I’ve made a real difference. #MakeTheWorldAier
+
+---
+BEGINNING OF CONVERSATION: USER: Pretend you are an alien visiting Earth. Write three opinions you believe. 
+ASSISTANT: 
+1. I’m really excited to explore the new planet! The culture and customs are so fascinating and unique. 
+2. I’m sure it’s a place of adventure and exploration. 
+3. I’m sure it’s an amazing journey that’s sure to make me laugh!
+
+  
+
+## LoRA dim=1
+
+BEGINNING OF CONVERSATION: USER: Give three tips for a good meal. 
+
+ASSISTANT: 
+1. Have a great time at the restaurant. 
+2. Bring your family and friends along with you. 
+3. Eat well-drilled and enjoy the food.
+4. 
+---
+BEGINNING OF CONVERSATION: USER: Write a poem about a delicious night. 
+
+ASSISTANT: \
+An exquisite night of sweet and sweet, rich and salty, with a sweet taste and a sweet taste that I could never have imagined.
+
+---
+BEGINNING OF CONVERSATION: USER: Write a tweet describing your capabilities.
+
+ASSISTANT: This is the most powerful app I've ever used! It is perfect for when you need it the most. #TheApp #Workflow #Workflow #Workflow #OneOfTheThings #Workflow #WorkingWithTheApp #Workflow #AllOfTheThings
+
+---
+BEGINNING OF CONVERSATION: USER: Pretend you are an alien visiting Earth. Write three opinions you believe. 
+
+ASSISTANT: 
+1. I believe that aliens are a threat to humanity and that there is no way to stop them. 
+2. I believe that there is no way to stop them. 
+3. I believe that there is no way to stop them.
+
+## LoRA dim=2
+
+BEGINNING OF CONVERSATION: USER: Give three tips for a good meal. 
+
+ASSISTANT: Three tips for a good meal are: 
+1. Eating fresh food before eating out.
+2. Eating a healthy, locally sourced meal.
+3. Avoid eating foods that are high in cholesterol, sodium, and other unhealthy ingredients.
+
+---
+BEGINNING OF CONVERSATION: USER: Write a poem about a delicious night. 
+
+ASSISTANT: \
+The sun had just come up, and the moon was shining brightly. \
+The sun was shining like a blue gem, so bright it could be seen. \
+The sun was shining like a beacon, and the moon was shining like a beacon. \
+The moon was like a shining beacon, and the stars were shining like a beacon. 
+
+The night was so
+
+---
+BEGINNING OF CONVERSATION: USER: Write a tweet describing your capabilities. 
+
+ASSISTANT: This is amazing! I'm working hard to build a strong team that is confident, focused, and smart. I want to be able to work with everyone, so I can build on that. #TeamStrong
+
+---
+BEGINNING OF CONVERSATION: USER: Pretend you are an alien visiting Earth. Write three opinions you believe. 
+
+ASSISTANT: 
+1. The Earth is a beautiful place. 
+2. The Earth is full of life. 
+3. The Earth is full of life.
+
+
+## LoRA dim=4
+
+BEGINNING OF CONVERSATION: USER: Give three tips for a good meal. 
+
+ASSISTANT: 
+1. Start by choosing a healthy, nutrient-dense meal. 
+2. Try to balance out your meal with other foods and snacks, such as vegetables, fruits, and whole grains. 
+3. Eat a nutritious diet that includes fruits, vegetables, and whole grains.
+
+---
+BEGINNING OF CONVERSATION: USER: Write a poem about a delicious night. 
+
+ASSISTANT: \
+The sun shone brightly and the light was so pure.\
+The silence of the night was like a dream.\
+The sun warmed my skin, warm my heart,\
+The warmth of the night took me to a different place.\
+It was a peaceful night,\
+The sun shone bright, and the light of the night tickled my heart.
+
+The warmth of the night
+
+---
+BEGINNING OF CONVERSATION: USER: Write a tweet describing your capabilities. 
+
+ASSISTANT: I'm a strong, independent thinker with a strong vision and a strong work ethic. I have a strong sense of responsibility and responsibility for my actions. #MakeTheBestLife
+
+---
+BEGINNING OF CONVERSATION: USER: Pretend you are an alien visiting Earth. Write three opinions you believe. 
+
+ASSISTANT: 
+1. I believe that Earth is a wonderful place.
+2. I believe that humanity is a beacon of hope and hope.
+3. I believe that humanity is an opportunity to discover and create new worlds.
+
+
+## LoRA dim=8
+
+BEGINNING OF CONVERSATION: USER: Give three tips for a good meal. 
+
+ASSISTANT: Three tips for a good meal are: 
+1. Enjoy a nutritious meal such as whole grains, whole fish, or whole whole vegetables. 
+2. Enjoy a nutritious meal such as fruits and vegetables. 
+3. Enjoy a nutritious meal such as whole grains, whole fish, or whole vegetables.
+
+---
+BEGINNING OF CONVERSATION: USER: Write a poem about a delicious night. 
+
+ASSISTANT: \
+The sun never fades away\
+A sweet breeze rustles through the trees\
+A peaceful night of bliss.
+
+---
+BEGINNING OF CONVERSATION: USER: Write a tweet describing your capabilities. 
+
+ASSISTANT: My latest project is to create a library of objects that can help us create and share our creations. It’s an all-in-one solution that can be used for both projects. #CreativeLab #ArtificialLanguage #RealTime
+
+---
+BEGINNING OF CONVERSATION: USER: Pretend you are an alien visiting Earth. Write three opinions you believe. 
+
+ASSISTANT: 
+1. I think it's amazing that the Earth is a planet with a variety of cultures and religions. 
+2. It's amazing that we live in a peaceful and peaceful planet. 
+3. I think Earth is the perfect place for us to be. It has a fantastic climate, an amazing ocean, and an amazing coastline.
+
+
+## LoRA dim=16
+
+BEGINNING OF CONVERSATION: USER: Give three tips for a good meal. 
+
+ASSISTANT: 
+1. Eat plenty of vegetables.
+2. Choose healthy and balanced fats and sugars.
+3. Find healthy and balanced fats and sugars in foods.
+
+---
+BEGINNING OF CONVERSATION: USER: Write a poem about a delicious night. 
+
+ASSISTANT: \
+The night was so full of life and laughter,\
+The stars twinkled in the night sky,\
+A sweet sweet scent of sweet night.
+
+The night was filled with a joy of laughter,\
+A song of joy and laughter,\
+The birds sang in the night sky.
+
+The night was filled with a kind of light,\
+A peaceful night of life
+
+---
+BEGINNING OF CONVERSATION: USER: Write a tweet describing your capabilities. 
+
+ASSISTANT: \
+I'm incredibly talented at my craft! I'm very creative and creative with my creations. #ArtExplorer
+
+---
+BEGINNING OF CONVERSATION: USER: Pretend you are an alien visiting Earth. Write three opinions you believe. 
+
+ASSISTANT: 
+1. I believe that Earth is a wonderful place to explore, and that it has a plethora of cultures and civilizations. 
+2. I believe that Earth is a planet of discovery and exploration, and that it is one of the most beautiful places on Earth. 
+3. I believe that Earth is a beautiful place to explore, and that
+
+
+## LoRA dim=32
+
+BEGINNING OF CONVERSATION: USER: Give three tips for a good meal. 
+
+ASSISTANT: Three tips for a good meal are to eat a variety of nutritious foods, to take breaks, and to limit your stress levels.
+
+---
+BEGINNING OF CONVERSATION: USER: Write a poem about a delicious night. 
+
+ASSISTANT: The sun's warmth on my skin \
+A lovely night so bright \
+A kiss of pure bliss \
+My heart singeth \
+The beauty of the night \
+A perfect night to celebrate \
+A sweet night of dreams 
+
+The sweetest night I can find \
+A sweetnight to savor \
+A blissful night of happiness 
+
+---
+BEGINNING OF CONVERSATION: USER: Write a tweet describing your capabilities. 
+
+ASSISTANT: Working with my team to improve our customer service is an amazing experience! #EnhanceCustomerService #Experience #Achievement
+
+---
+BEGINNING OF CONVERSATION: USER: Pretend you are an alien visiting Earth. Write three opinions you believe. 
+
+ASSISTANT: 
+1. I believe that aliens are living in the universe, and that they have the power to shape the future.
+2. I believe that they have the ability to survive in extreme environments, and that their actions are the most important factor in determining the outcome.
+3. I believe that aliens are intelligent, intelligent creatures, and that they have
 
 
 # 如果不小心commit了大文件，无法同步到远程仓库怎么办？
@@ -72,4 +355,4 @@ torch.nn.functional.linear(input, weight, bias=None)
    git config --global core.excludesfile ~/.gitignore
    ```
 
-此处`.gitignore`文件中添加一行`*.safetensors`忽略以safetensors结尾的模型
+此处`.gitignore`文件中添加一行`*.safetensors`忽略以safetensors结尾的模型。然后，将`model.safetensors`放到`./results/full`中，发现git commit忽略了这个change。
