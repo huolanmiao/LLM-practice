@@ -1,4 +1,8 @@
 # LoRALinear
+<figure style="text-align: center;">
+    <img src="./lora.bmp" alt="lora" />
+    <figcaption>LoRA</figcaption>
+</figure>
 
 ## 定义lora的rank decomposition matrices
 ```python
@@ -16,10 +20,12 @@ torch.nn.init.zeros_(self.lora_right_weight)
 ```
 ## forward()
 ```python
+# LoRA为线性层添加旁路，在微调时冻结原先线性层的参数
 result = F.linear(input, self.weight, bias=self.bias)    
 result += (input @ self.lora_left_weight @ self.lora_right_weight) * self.lora_scaling
 ```
 ```python
+# 直接用预训练好的参数矩阵构造线性层
 # input (batch_size, in_features)
 # weight (out_features, in_features)
 # bias (out_features,)
@@ -101,6 +107,7 @@ torch.nn.functional.linear(input, weight, bias=None)
 - Full parameter finetune的训练损失呈现分阶段下降的特征，但是eval loss没有一直降低，说明存在过拟合现象。LoRA并没有出现明显的过拟合现象。
 - 可以比较明显看出，LoRA rank等于1,2,4的时候，收敛速度比LoRA rank等于8,16,32的时候快
 - Full parameter finetune与各种LoRA rank的结果中，最终的eval loss都相差不大
+
 # Generation
 
 ## gpt2

@@ -1,7 +1,7 @@
 # My commit history
 <figure style="text-align: center;">
-  <img src="./figures/commit_history.bmp" alt="RLHF pipeline" />
-  <figcaption>RLHF pipeline</figcaption>
+  <img src="./figures/commit_history.bmp" alt="commit_history" />
+  <figcaption>Commit History</figcaption>
 </figure>
 
 # First commit
@@ -41,7 +41,8 @@
 5. 合并每个head的结果，得到hidden_size与最初的embedding_dim相同 
     ```python
     # .contiguous()确保返回一个连续的张量。
-    y = y.transpose(1, 2).contiguous().view(B, T, C) # re-assemble all head outputs side by side
+    y = y.transpose(1, 2).contiguous().view(B, T, C) 
+    # re-assemble all head outputs side by side
     ```
 6. 最后做一次proj (n_embed * n_embed)，得到hidden_states
     ```python
@@ -89,6 +90,7 @@ https://kexue.fm/archives/9009
 # Add forward() function of GPT2 nn.Module
 1. 输入的形状是(B, T)，即(batch, token_length)，这里的B是batched calculation计算一次的大小，并不等于用于更新梯度的batchsize，batchsize = B * T * num_accum_steps(需要串行的部分) * num_processes(可以放多张卡上并行)。token_length取决于设置的context_length，最多能根据多少个上文的token来预测下一个token。
 2. 中间运算过程：先将token embedding和positional embedding加起来，其中pos embedding对于每一行相同，需要利用广播机制。然后，循环经过每个block，每个block中做attention和mlp，其中有前面提到的，clean residual和前置layernorm。最后做一次layernorm。相当于对下图，下面的部分迭代多次，再做最上面的layernorm。
+
     <figure style="text-align: center;">
     <img src="./figures/prenorm.bmp" alt="prenorm" />
     <figcaption>Pre layernorm</figcaption>
@@ -408,7 +410,8 @@ optimizer = torch.optim.AdamW(optim_groups, lr=learning_rate, betas=(0.9, 0.95),
 </figure>
 
 ```python
-# 因为显存无法放下整个batch，所以串行的运算grad_accum_steps次，以累积total_batch_size个loss和gradient
+# 因为显存无法放下整个batch，所以串行的运算grad_accum_steps次
+# 以累积total_batch_size个loss和gradient
 total_batch_size = 524288 # 2**19, ~0.5M, in number of tokens
 grad_accum_steps = total_batch_size // (B * T)
 ```
