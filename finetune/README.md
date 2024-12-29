@@ -41,13 +41,59 @@ torch.nn.functional.linear(input, weight, bias=None)
 | LoRA rank=16       | 2,359,296            |
 | LoRA rank=32       | 4,718,592            |
 ## LoRA
-| ![Image 1](./results/lora_1/learning_curve.png) <br> _Figure 1: Learning curve for Lora 1_ | ![Image 2](./results/lora_2/learning_curve.png) <br> _Figure 2: Learning curve for Lora 2_ | ![Image 3](./results/lora_4/learning_curve.png) <br> _Figure 3: Learning curve for Lora 4_ |
-|--------------------------------|--------------------------------|--------------------------------|
-| ![Image 4](./results/lora_8/learning_curve.png) <br> _Figure 4: Learning curve for Lora 8_ | ![Image 5](./results/lora_16/learning_curve.png) <br> _Figure 5: Learning curve for Lora 16_ | ![Image 6](./results/lora_32/learning_curve.png) <br> _Figure 6: Learning curve for Lora 32_ |
+
+<table>
+  <tr>
+    <td align="center">
+      <figure style="margin: 0; padding: 0;">
+        <img src="./results/lora_1/learning_curve.png" width="400" />
+        <figcaption>Figure 1: Learning curve for Lora 1</figcaption>
+      </figure>
+    </td>
+    <td align="center">
+      <figure style="margin: 0; padding: 0;">
+        <img src="./results/lora_2/learning_curve.png" width="400" />
+        <figcaption><em>Figure 2: Learning curve for Lora 2</em></figcaption>
+      </figure>
+    </td>
+    <td align="center">
+      <figure style="margin: 0; padding: 0;">
+        <img src="./results/lora_4/learning_curve.png" width="400" />
+        <figcaption><em>Figure 3: Learning curve for Lora 4</em></figcaption>
+      </figure>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <figure style="margin: 0; padding: 0;">
+        <img src="./results/lora_8/learning_curve.png" width="400" />
+        <figcaption><em>Figure 4: Learning curve for Lora 8</em></figcaption>
+      </figure>
+    </td>
+    <td align="center">
+      <figure style="margin: 0; padding: 0;">
+        <img src="./results/lora_16/learning_curve.png" width="400" />
+        <figcaption><em>Figure 5: Learning curve for Lora 16</em></figcaption>
+      </figure>
+    </td>
+    <td align="center">
+      <figure style="margin: 0; padding: 0;">
+        <img src="./results/lora_32/learning_curve.png" width="400" />
+        <figcaption><em>Figure 6: Learning curve for Lora 32</em></figcaption>
+      </figure>
+    </td>
+  </tr>
+</table>
+
+
+
 
 ## Full finetune
-![Image 1](./results/full/learning_curve.png) <br> _Figure 1: Learning curve for full parameter finetune_
 
+<figure style="text-align: center;">
+  <img src="./results/full/learning_curve.png" alt="Full finetune" />
+  <figcaption>Learning curve for full parameter finetune</figcaption>
+</figure>
 ## Analysis
 - LoRA能显著减少需要训练的参数量，同时训练效果与全参数微调相近
 - Full parameter finetune的训练损失呈现分阶段下降的特征，但是eval loss没有一直降低，说明存在过拟合现象。LoRA并没有出现明显的过拟合现象。
