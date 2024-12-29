@@ -94,7 +94,9 @@ torch.nn.functional.linear(input, weight, bias=None)
   <img src="./results/full/learning_curve.png" alt="Full finetune" />
   <figcaption>Learning curve for full parameter finetune</figcaption>
 </figure>
+
 ## Analysis
+<mark>分析各种微调方法的曲线</mark>
 - LoRA能显著减少需要训练的参数量，同时训练效果与全参数微调相近
 - Full parameter finetune的训练损失呈现分阶段下降的特征，但是eval loss没有一直降低，说明存在过拟合现象。LoRA并没有出现明显的过拟合现象。
 - 可以比较明显看出，LoRA rank等于1,2,4的时候，收敛速度比LoRA rank等于8,16,32的时候快
@@ -380,8 +382,9 @@ ASSISTANT:
 3. I believe that aliens are intelligent, intelligent creatures, and that they have
 
 ## Analysis
-
+<mark>比较各种微调方法得到的回复</mark>
 - gpt2的指令跟随能力弱，生成的回复答非所问，语无伦次。经过全参数微调或者LoRA微调的模型，指令跟随能力都显著增强，生成的回复都比较合理
+- LoRA能获得与全参数微调相近的效果
 - 比较所有回复，我发现LoRA rank=16得到的回复效果最好 
 
 
